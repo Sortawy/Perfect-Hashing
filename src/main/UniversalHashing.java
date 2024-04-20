@@ -1,6 +1,6 @@
 package src.main;
 
-public class UniversalHashing {
+public class UniversalHashing<T> {
     private int b;
     private int u;
     private int[][] h;
@@ -15,8 +15,8 @@ public class UniversalHashing {
         generateRandomMatrix();
     }
 
-    public int hash(int key) {
-        fillVector(key);
+    public int hash(T key) {
+        fillVector(key.hashCode());
         String hashvalue = matrixMultiplication();
         return Integer.parseInt(hashvalue, 2);
     }
