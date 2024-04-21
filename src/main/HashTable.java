@@ -23,7 +23,7 @@ public class HashTable<T> {
         if(this.isFull()) {
             throw new IllegalStateException("Hash Table is full");
         }
-        if (hashTable[key] != null) {  // collision
+        while (hashTable[key] != null) {  // collision
             universalHashing.regenerateHashFunction();
             rehash();
             key = universalHashing.hash(value);
