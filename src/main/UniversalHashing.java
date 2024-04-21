@@ -18,6 +18,7 @@ public class UniversalHashing<T> {
     }
 
     public int hash(T key) {
+        if(this.hashTableSize == 1) return 0;
         fillVector(key.hashCode());
         String hashvalue = matrixMultiplication();
         return Integer.parseInt(hashvalue, 2) % hashTableSize;
@@ -55,6 +56,19 @@ public class UniversalHashing<T> {
             result = 0;
         }
         return ans.toString();
+    }
+
+    public static void main(String[] args) {
+        UniversalHashing<Integer> universalHashing = new UniversalHashing<>(1);
+        System.out.println(universalHashing.hash(0));
+        System.out.println(universalHashing.hash(1));
+        System.out.println(universalHashing.hash(2));
+        System.out.println(universalHashing.hash(3));
+        universalHashing.regenerateHashFunction();
+        System.out.println(universalHashing.hash(0));
+        System.out.println(universalHashing.hash(1));
+        System.out.println(universalHashing.hash(2));
+        System.out.println(universalHashing.hash(3));
     }
 
 }
