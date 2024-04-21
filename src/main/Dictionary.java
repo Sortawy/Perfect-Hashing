@@ -120,6 +120,11 @@ public class Dictionary implements IDictionary {
                 BufferedReader buffReader = new BufferedReader(new FileReader(input_file));
                 String line = buffReader.readLine();
                 while (line != null) {
+                    if(line.trim().isEmpty()) // if it's whitespace
+                    {
+                        line = buffReader.readLine();
+                        continue;
+                    }
                     lines.add(line);
                     line = buffReader.readLine();
                 }
