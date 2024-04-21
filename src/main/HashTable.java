@@ -5,13 +5,15 @@ import java.util.Arrays;
 
 public class HashTable<T> {
     private int size;
-     int count = 0;
+    private int count;
+    private int numberOfCollisions;
     private Object[] hashTable;
     private UniversalHashing<T> universalHashing;
 
     public HashTable(int size) {
         this.size = size * size;
         this.count = 0;
+        this.numberOfCollisions = 0;
         hashTable = new Object[this.size];
         universalHashing = new UniversalHashing<>(this.size);
     }
@@ -19,11 +21,12 @@ public class HashTable<T> {
     public void insert(T value) {
         int key = universalHashing.hash(value);
 
-        if(this.contains(value)) return; // value already exists
+        if(this.contains(value)) return; // ignore duplicates
         if(this.isFull()) {
             throw new IllegalStateException("Hash Table is full");
         }
         while (hashTable[key] != null) {  // collision
+            numberOfCollisions++;
             universalHashing.regenerateHashFunction();
             rehash();
             key = universalHashing.hash(value);
@@ -43,6 +46,10 @@ public class HashTable<T> {
     public boolean contains(T value) {
         int key = universalHashing.hash(value);
         return hashTable[key] == value;
+    }
+
+    public int getNumberOfCollisions() {
+        return numberOfCollisions;
     }
 
     private void rehash() {

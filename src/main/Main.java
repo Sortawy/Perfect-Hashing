@@ -22,7 +22,5 @@ public class Main {
                System.out.println("Error" + i);
            }
        }
-        System.out.println(hashTable.count);
-
     }
 }
