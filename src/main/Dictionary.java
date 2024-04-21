@@ -32,8 +32,10 @@ public class Dictionary implements IDictionary {
     @Override
     public void insert(String key) {
         this.resetCounters();
-        if (this.hashTable.contains(key))
+        if (this.hashTable.contains(key)) {
             this.misses++;
+            return;
+        }
         this.hashTable.insert(key);
         if (this.hashTable.contains(key))
             this.hits++;
@@ -42,8 +44,10 @@ public class Dictionary implements IDictionary {
     @Override
     public void delete(String key) {
         this.resetCounters();
-        if (!this.hashTable.contains(key))
+        if (!this.hashTable.contains(key)) {
             this.misses++;
+            return;
+        }
         this.hashTable.insert(key);
         if (!this.hashTable.contains(key))
             this.hits++;
