@@ -20,6 +20,7 @@ public class UniversalHashing<T> {
     public int hash(T value) {
         fillVector(value.hashCode());
         String key = matrixMultiplication();
+        if (key.isEmpty()) return 0;
         return Integer.parseInt(key, 2) % hashTableSize;
     }
 
