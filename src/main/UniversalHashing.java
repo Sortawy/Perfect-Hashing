@@ -17,10 +17,10 @@ public class UniversalHashing<T> {
         generateRandomMatrix();
     }
 
-    public int hash(T key) {
-        fillVector(key.hashCode());
-        String hashvalue = matrixMultiplication();
-        return Integer.parseInt(hashvalue, 2) % hashTableSize;
+    public int hash(T value) {
+        fillVector(value.hashCode());
+        String key = matrixMultiplication();
+        return Integer.parseInt(key, 2) % hashTableSize;
     }
 
     public void regenerateHashFunction() {
@@ -35,11 +35,11 @@ public class UniversalHashing<T> {
         }
     }
 
-    private void fillVector(int key) {
-        String binaryKey = Integer.toBinaryString(key);
-        int k = binaryKey.length()-1;
+    private void fillVector(int value) {
+        String binaryKey = Integer.toBinaryString(value);
+        int j = binaryKey.length()-1;
         for (int i = MAX_NUMBER_OF_BITS - 1; i >= 0; i--) {
-            char c = k >= 0 ? binaryKey.charAt(k--) : '0';
+            char c = j >= 0 ? binaryKey.charAt(j--) : '0';
             x[i][0] =  Integer.parseInt(String.valueOf(c));
         }
     }
