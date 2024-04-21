@@ -2,7 +2,7 @@ package src.main;
 
 public class Main {
     public static void main(String[] args) {
-       HashTable<Integer> hashTable = new HashTable<>(10);
+       HashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
 
        for (int i = 0; i < 10; i++) {
            hashTable.insert(i);
