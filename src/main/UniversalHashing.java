@@ -3,11 +3,13 @@ package src.main;
 public class UniversalHashing<T> {
     private int b;
     private int u;
+    private int hashTableSize;
     private int[][] h;
     private int[][] x;
     private final int MAX_NUMBER_OF_BITS = 32;
 
     public UniversalHashing(int hashTableSize) {
+        this.hashTableSize = hashTableSize;
         b = (int) Math.ceil(Math.log(hashTableSize) / Math.log(2));
         u = MAX_NUMBER_OF_BITS;
         h = new int[b][u];
@@ -18,7 +20,7 @@ public class UniversalHashing<T> {
     public int hash(T key) {
         fillVector(key.hashCode());
         String hashvalue = matrixMultiplication();
-        return Integer.parseInt(hashvalue, 2);
+        return Integer.parseInt(hashvalue, 2) % hashTableSize;
     }
 
     public void regenerateHashFunction() {
