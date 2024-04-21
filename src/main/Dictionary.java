@@ -64,6 +64,8 @@ public class Dictionary implements IDictionary {
         this.resetCounters();
         File file=new File(file_path);
         ArrayList<String>toBeAdded=WordReader.readFromFile(file);
+        // uncomment if you want to rehash the table for each batch insert
+//        this.hashTable=new QuadraticSpaceHashTable<>(toBeAdded.size());
         for (String word:toBeAdded){
             this.insert(word);
         }
