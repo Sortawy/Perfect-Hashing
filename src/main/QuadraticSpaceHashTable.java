@@ -26,7 +26,6 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
         }
         while (hashTable[key] != null) {  // collision
             numberOfCollisions++;
-            universalHashing.regenerateHashFunction();
             rehash();
             key = universalHashing.hash(value);
         }
@@ -51,7 +50,8 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
         return numberOfCollisions;
     }
 
-    private void rehash() {
+    public void rehash() {
+        universalHashing.regenerateHashFunction();
         ArrayList<T> currentValues = new ArrayList<>();
 
         for (int i = 0;i < this.size; i++) {
@@ -61,6 +61,22 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
         }
         count = 0;
         currentValues.forEach(this::insert);
+    }
+
+    public void rehash(int size) {
+        this.size = size * size;
+        universalHashing = new UniversalHashing<>(this.size);
+        ArrayList<T> currentValues = new ArrayList<>();
+
+         for (int i = 0;i < hashTable.length; i++) {
+            if (hashTable[i] == null) continue;
+            currentValues.add((T) hashTable[i]);
+            hashTable[i] = null;
+         }
+
+         hashTable = new Object[this.size];
+         count = 0;
+         currentValues.forEach(this::insert);
     }
 
     private boolean isFull() {

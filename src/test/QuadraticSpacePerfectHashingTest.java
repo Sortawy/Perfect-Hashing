@@ -179,6 +179,56 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
     }
 
     @Test
+    public void testRehashWithIntegers() {
+        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
+        ArrayList<Integer> list = generateUniqueRandomList(10);
+        for (Integer i : list) {
+            hashTable.insert(i);
+        }
+        hashTable.rehash(100);
+        for (Integer i : list) {
+            assertTrue(hashTable.contains(i));
+        }
+        assertEquals(hashTable.getCount(), list.size());
+    }
+
+    @Test
+    public void testRehashWithStrings() {
+        QuadraticSpaceHashTable<String> hashTable = new QuadraticSpaceHashTable<>(10);
+        ArrayList<String> list = getListOfStrings();
+        for (String i : list) {
+            hashTable.insert(i);
+        }
+        hashTable.rehash(100);
+        for (String i : list) {
+            assertTrue(hashTable.contains(i));
+        }
+        assertEquals(hashTable.getCount(), list.size());
+    }
+
+    @Test
+    public void testRehashAfterSomeDeleteThenInsert() {
+        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
+        ArrayList<Integer> list = generateUniqueRandomList(10,10);
+        for (Integer i : list) {
+            hashTable.insert(i);
+        }
+        hashTable.delete(1);
+        hashTable.delete(2);
+        hashTable.delete(3);
+        hashTable.rehash(100);
+        hashTable.insert(1);
+        for (Integer i : list) {
+            if (i == 2 || i == 3) {
+                assertFalse(hashTable.contains(i));
+            } else {
+                assertTrue(hashTable.contains(i));
+            }
+        }
+        assertEquals(hashTable.getCount(), 8);
+    }
+
+    @Test
     public void testNumberOfTimesNeededToRebuildHashtable() {
         int totalNumberOfCollisions = 0;
         int trails = 1000;
@@ -192,7 +242,6 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         }
         double averageNumberOfCollisions = 1.0 * totalNumberOfCollisions / trails;
         assertTrue(averageNumberOfCollisions <= 2);
-        System.out.println(averageNumberOfCollisions);
     }
 
 }
