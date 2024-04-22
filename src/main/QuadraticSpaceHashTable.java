@@ -98,7 +98,7 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
         return hashTable;
     }
 
-    public int getCount() {
+    public int getNumberOfItems() {
         return count;
     }
 }

@@ -11,7 +11,6 @@ public class Dictionary implements IDictionary {
     private int misses; /* count of failed operations */
     private HashTable<String> hashTable;
     private boolean isBatch;
-    private int current_items;
 
     Dictionary(){}
 
@@ -21,7 +20,6 @@ public class Dictionary implements IDictionary {
      * @param hashing_type : Type of the backend perfect hashing (N/N^2) space solutions.
      */
     Dictionary(String hashing_type){
-        this.current_items=0;
         this.resetCounters();
         this.isBatch=false;
         int INITIAL_SIZE = 10;
@@ -42,10 +40,9 @@ public class Dictionary implements IDictionary {
             return;
         }
         if(this.hashTable.isFull()){
-            this.hashTable.rehash(this.current_items*2); // increase capacity and rehash
+            this.hashTable.rehash(this.hashTable.getNumberOfItems()*2); // increase capacity and rehash
         }
         this.hashTable.insert(key);
-        this.current_items++;
         if (this.hashTable.contains(key))
             this.hits++;
     }
@@ -59,7 +56,6 @@ public class Dictionary implements IDictionary {
             return;
         }
         this.hashTable.delete(key);
-        this.current_items--;
         if (!this.hashTable.contains(key))
             this.hits++;
     }
@@ -80,7 +76,7 @@ public class Dictionary implements IDictionary {
             return;
         }
         ArrayList<String>toBeAdded=WordReader.readFromFile(file);
-        this.hashTable.rehash(toBeAdded.size()+this.current_items);
+        this.hashTable.rehash(toBeAdded.size()+this.hashTable.getNumberOfItems());
         for (String word:toBeAdded){
             this.insert(word);
         }

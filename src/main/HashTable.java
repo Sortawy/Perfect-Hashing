@@ -13,4 +13,6 @@ public interface HashTable<T> {
     void rehash(int size);
 
     boolean isFull();
+
+    int getNumberOfItems();
 }
