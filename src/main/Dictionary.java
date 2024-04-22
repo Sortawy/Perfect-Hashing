@@ -22,12 +22,12 @@ public class Dictionary implements IDictionary {
     Dictionary(String hashing_type){
         this.resetCounters();
         this.isBatch=false;
-        int MAX_SIZE = 1000;
+        int INITIAL_SIZE = 10;
         if (hashing_type.equals("N^2")) { // N^2-Space Solution
-            this.hashTable=new QuadraticSpaceHashTable<>(MAX_SIZE);
+            this.hashTable=new QuadraticSpaceHashTable<>(INITIAL_SIZE);
         }
         else { // N-Space Solution
-//            this.hashTable=new LinearSpaceHashTable<>(10);
+//            this.hashTable=new LinearSpaceHashTable<>(INITIAL_SIZE);
         }
     }
 
@@ -38,6 +38,9 @@ public class Dictionary implements IDictionary {
         if (this.hashTable.contains(key)) {
             this.misses++;
             return;
+        }
+        if(this.hashTable.isFull()){
+            this.hashTable.rehash(this.hashTable.getNumberOfItems()*2); // increase capacity and rehash
         }
         this.hashTable.insert(key);
         if (this.hashTable.contains(key))
@@ -73,8 +76,7 @@ public class Dictionary implements IDictionary {
             return;
         }
         ArrayList<String>toBeAdded=WordReader.readFromFile(file);
-        // uncomment if you want to rehash the table for each batch insert
-//        this.hashTable=new QuadraticSpaceHashTable<>(toBeAdded.size());
+        this.hashTable.rehash(toBeAdded.size()+this.hashTable.getNumberOfItems());
         for (String word:toBeAdded){
             this.insert(word);
         }

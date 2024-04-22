@@ -31,7 +31,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         for (Integer i : list) {
             hashTable.insert(i);
         }
-        assertEquals(500, hashTable.getCount());
+        assertEquals(500, hashTable.getNumberOfItems());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         for (String i : list) {
             hashTable.insert(i);
         }
-        assertEquals(list.size(), hashTable.getCount());
+        assertEquals(list.size(), hashTable.getNumberOfItems());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
             hashTable.insert(i);
             hashTable.insert(i);
         }
-        assertEquals(500, hashTable.getCount());
+        assertEquals(500, hashTable.getNumberOfItems());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
             hashTable.insert(i);
             hashTable.insert(i);
         }
-        assertEquals(list.size(), hashTable.getCount());
+        assertEquals(list.size(), hashTable.getNumberOfItems());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         for (Integer i : list) {
             hashTable.delete(i);
         }
-        assertEquals(0, hashTable.getCount());
+        assertEquals(0, hashTable.getNumberOfItems());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         for (String i : list) {
             hashTable.delete(i);
         }
-        assertEquals(0, hashTable.getCount());
+        assertEquals(0, hashTable.getNumberOfItems());
     }
 
     @Test
@@ -162,7 +162,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         hashTable.delete(501);
         hashTable.delete(502);
         hashTable.delete(503);
-        assertEquals(list.size(), hashTable.getCount());
+        assertEquals(list.size(), hashTable.getNumberOfItems());
     }
 
     @Test
@@ -175,7 +175,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         hashTable.delete("This is a test");
         hashTable.delete("hi");
         hashTable.delete("TTest");
-        assertEquals(list.size(), hashTable.getCount());
+        assertEquals(list.size(), hashTable.getNumberOfItems());
     }
 
     @Test
@@ -189,7 +189,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         for (Integer i : list) {
             assertTrue(hashTable.contains(i));
         }
-        assertEquals(hashTable.getCount(), list.size());
+        assertEquals(hashTable.getNumberOfItems(), list.size());
     }
 
     @Test
@@ -203,7 +203,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         for (String i : list) {
             assertTrue(hashTable.contains(i));
         }
-        assertEquals(hashTable.getCount(), list.size());
+        assertEquals(hashTable.getNumberOfItems(), list.size());
     }
 
     @Test
@@ -225,7 +225,7 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
                 assertTrue(hashTable.contains(i));
             }
         }
-        assertEquals(hashTable.getCount(), 8);
+        assertEquals(hashTable.getNumberOfItems(), 8);
     }
 
     @Test
