@@ -79,7 +79,7 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
          currentValues.forEach(this::insert);
     }
 
-    private boolean isFull() {
+    public boolean isFull() {
         return count == Math.sqrt(size); // sqrt to get the real size
     }
 

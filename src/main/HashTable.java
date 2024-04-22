@@ -9,4 +9,8 @@ public interface HashTable<T> {
     boolean contains(T value);
 
     int getNumberOfCollisions();
+
+    void rehash(int size);
+
+    boolean isFull();
 }

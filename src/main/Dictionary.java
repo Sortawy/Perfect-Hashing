@@ -11,6 +11,7 @@ public class Dictionary implements IDictionary {
     private int misses; /* count of failed operations */
     private HashTable<String> hashTable;
     private boolean isBatch;
+    private int current_items;
 
     Dictionary(){}
 
@@ -20,14 +21,15 @@ public class Dictionary implements IDictionary {
      * @param hashing_type : Type of the backend perfect hashing (N/N^2) space solutions.
      */
     Dictionary(String hashing_type){
+        this.current_items=0;
         this.resetCounters();
         this.isBatch=false;
-        int MAX_SIZE = 1000;
+        int INITIAL_SIZE = 10;
         if (hashing_type.equals("N^2")) { // N^2-Space Solution
-            this.hashTable=new QuadraticSpaceHashTable<>(MAX_SIZE);
+            this.hashTable=new QuadraticSpaceHashTable<>(INITIAL_SIZE);
         }
         else { // N-Space Solution
-//            this.hashTable=new LinearSpaceHashTable<>(10);
+//            this.hashTable=new LinearSpaceHashTable<>(INITIAL_SIZE);
         }
     }
 
@@ -39,7 +41,11 @@ public class Dictionary implements IDictionary {
             this.misses++;
             return;
         }
+        if(this.hashTable.isFull()){
+            this.hashTable.rehash(this.current_items*2); // increase capacity and rehash
+        }
         this.hashTable.insert(key);
+        this.current_items++;
         if (this.hashTable.contains(key))
             this.hits++;
     }
@@ -53,6 +59,7 @@ public class Dictionary implements IDictionary {
             return;
         }
         this.hashTable.delete(key);
+        this.current_items--;
         if (!this.hashTable.contains(key))
             this.hits++;
     }
@@ -73,8 +80,7 @@ public class Dictionary implements IDictionary {
             return;
         }
         ArrayList<String>toBeAdded=WordReader.readFromFile(file);
-        // uncomment if you want to rehash the table for each batch insert
-//        this.hashTable=new QuadraticSpaceHashTable<>(toBeAdded.size());
+        this.hashTable.rehash(toBeAdded.size()+this.current_items);
         for (String word:toBeAdded){
             this.insert(word);
         }
