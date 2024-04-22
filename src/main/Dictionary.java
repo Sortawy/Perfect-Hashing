@@ -10,6 +10,7 @@ public class Dictionary implements IDictionary {
     private int hits; /* count of successful operations */
     private int misses; /* count of failed operations */
     private HashTable<String> hashTable;
+    private boolean isBatch;
 
     Dictionary(){}
 
@@ -20,7 +21,8 @@ public class Dictionary implements IDictionary {
      */
     Dictionary(String hashing_type){
         this.resetCounters();
-        int MAX_SIZE = 1_000_000;
+        this.isBatch=false;
+        int MAX_SIZE = 1000;
         if (hashing_type.equals("N^2")) { // N^2-Space Solution
             this.hashTable=new QuadraticSpaceHashTable<>(MAX_SIZE);
         }
@@ -31,7 +33,8 @@ public class Dictionary implements IDictionary {
 
     @Override
     public void insert(String key) {
-        this.resetCounters();
+        if (!this.isBatch)
+            this.resetCounters();
         if (this.hashTable.contains(key)) {
             this.misses++;
             return;
@@ -43,15 +46,15 @@ public class Dictionary implements IDictionary {
 
     @Override
     public void delete(String key) {
-        this.resetCounters();
+        if (!this.isBatch)
+            this.resetCounters();
         if (!this.hashTable.contains(key)) {
             this.misses++;
             return;
         }
-        this.hashTable.insert(key);
+        this.hashTable.delete(key);
         if (!this.hashTable.contains(key))
             this.hits++;
-        this.hashTable.delete(key);
     }
 
     @Override
@@ -62,27 +65,37 @@ public class Dictionary implements IDictionary {
     @Override
     public void batchInsert(String file_path) {
         this.resetCounters();
+        this.isBatch=true;
         File file=new File(file_path);
+        if (!file.exists() || !file.canRead()) {
+            System.out.println("ERROR! Cannot open the file.");
+            this.isBatch=false;
+            return;
+        }
         ArrayList<String>toBeAdded=WordReader.readFromFile(file);
         // uncomment if you want to rehash the table for each batch insert
 //        this.hashTable=new QuadraticSpaceHashTable<>(toBeAdded.size());
         for (String word:toBeAdded){
             this.insert(word);
         }
+        this.isBatch=false;
     }
 
     @Override
     public void batchDelete(String file_path) {
         this.resetCounters();
+        this.isBatch=true;
         File file=new File(file_path);
         if (!file.exists() || !file.canRead()) {
             System.out.println("ERROR! Cannot open the file.");
+            this.isBatch=false;
             return;
         }
         ArrayList<String>toBeDeleted=WordReader.readFromFile(file);
         for (String word:toBeDeleted){
             this.delete(word);
         }
+        this.isBatch=false;
     }
 
     /**

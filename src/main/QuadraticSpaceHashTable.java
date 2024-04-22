@@ -44,7 +44,8 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
 
     public boolean contains(T value) {
         int key = universalHashing.hash(value);
-        return hashTable[key] == value;
+        if (hashTable[key] == null) return false;
+        else return hashTable[key].equals(value);
     }
 
     public int getNumberOfCollisions() {

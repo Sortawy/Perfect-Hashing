@@ -22,6 +22,7 @@ public class Main {
             switch (choice) {
                 case 1: // insert
                     System.out.print("Enter the string you want to add to the dictionary: ");
+                    in.nextLine();
                     input= in.nextLine();
                     System.out.println();
                     dictionary.insert(input);
@@ -37,6 +38,7 @@ public class Main {
                     break;
                 case 2: // delete
                     System.out.print("Enter the string you want to remove from the dictionary: ");
+                    in.nextLine();
                     input=in.nextLine();
                     dictionary.delete(input);
                     if (dictionary.getHits()==1){
@@ -50,7 +52,8 @@ public class Main {
                     }
                     break;
                 case 3: // search
-                    System.out.print("Enter the string you want to remove from the dictionary: ");
+                    System.out.print("Enter the string you want to look up for in the dictionary: ");
+                    in.nextLine();
                     input=in.nextLine();
                     if(dictionary.search(input)){
                         System.out.println("\""+input+"\" is in the dictionary.");
@@ -60,14 +63,16 @@ public class Main {
                     }
                     break;
                 case 4: // batch insert
-                    System.out.println("Enter the path of the file you want to batch insert from: ");
+                    System.out.print("Enter the path of the file you want to batch insert from: ");
+                    in.nextLine();
                     input = in.nextLine();
                     dictionary.batchInsert(input);
                     System.out.println("Count of newly added strings: " + dictionary.getHits());
                     System.out.println("Count of already existing strings: " + dictionary.getMisses());
                     break;
                 case 5: // batch delete
-                    System.out.println("Enter the path of the file you want to batch delete from: ");
+                    System.out.print("Enter the path of the file you want to batch delete from: ");
+                    in.nextLine();
                     input = in.nextLine();
                     dictionary.batchDelete(input);
                     // results
@@ -75,15 +80,18 @@ public class Main {
                     System.out.println("Count of non existing strings: "+ dictionary.getMisses());
                     break;
                 case 6: // exit
+                    in.close();
                     return;
                 default:
                     System.out.println("Invalid choice.");
+                    in.close();
                     return;
             }
 
         }
     }
     static void printMenu(){
+        System.out.println();
         System.out.println("1. Insert a string");
         System.out.println("2. Delete a string");
         System.out.println("3. Search for a string");
