@@ -27,10 +27,10 @@ public class Main {
                     System.out.println();
                     dictionary.insert(input);
                     if (dictionary.getHits()==1){
-                        System.out.print("The word is successfully inserted.");
+                        System.out.print("The word "+"\""+input+"\""+" is successfully inserted.");
                     }
                     else if (dictionary.getMisses()==1){
-                        System.out.print("The word already exists.");
+                        System.out.print("The word "+"\""+input+"\""+" already exists.");
                     }
                     else {
                         System.out.println("Error, hits ==  misses !"); // shouldn't occur
@@ -42,10 +42,10 @@ public class Main {
                     input=in.nextLine();
                     dictionary.delete(input);
                     if (dictionary.getHits()==1){
-                        System.out.print("The word is successfully deleted.");
+                        System.out.print("The word "+"\""+input+"\""+" is successfully deleted.");
                     }
                     else if (dictionary.getMisses()==1){
-                        System.out.print("The word does not exist.");
+                        System.out.print("The word "+"\""+input+"\""+" does not exist.");
                     }
                     else {
                         System.out.println("Error, hits ==  misses !"); // shouldn't occur
@@ -88,6 +88,7 @@ public class Main {
                     return;
             }
 
+            System.out.println("Number of rehashes made: " +dictionary.getRehashCount());
         }
     }
     static void printMenu(){
