@@ -27,6 +27,10 @@ public class UniversalHashing<T> {
         generateRandomMatrix();
     }
 
+    public int getHashTableSize() {
+        return hashTableSize;
+    }
+
     private void generateRandomMatrix() {
         for (int i = 0; i < b; i++) {
             for (int j = 0; j < u; j++) {
