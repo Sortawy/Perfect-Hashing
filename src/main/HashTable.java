@@ -7,4 +7,6 @@ public interface HashTable<T> {
     void delete(T value);
 
     boolean contains(T value);
+
+    int getNumberOfCollisions();
 }
