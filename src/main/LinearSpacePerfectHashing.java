@@ -1,51 +1,51 @@
 package src.main;
 
-public class LinearSpacePerfectHashing {
-    private UniversalHashing<Integer> firstLevelHashFunction;
-    private UniversalHashing<Integer>[] secondLevelHashFunctions;
+public class LinearSpacePerfectHashing <T> {
+    private UniversalHashing<T> firstLevelHashFunction;
+    private UniversalHashing<T>[] secondLevelHashFunctions;
     private int numberOfKeys;
     private int numberOfRebuild;
     private int[] numberOfCollisions;
-    private Object[][] secondLevelHashTables;
+    private T[][] secondLevelHashTables;
 
-    public LinearSpacePerfectHashing (int[] keys) {
+    public LinearSpacePerfectHashing (T[] keys) {
         this.numberOfRebuild = 0;
         this.numberOfKeys = keys.length;
         this.numberOfCollisions = new int[numberOfKeys];
-        this.secondLevelHashTables = new Object[numberOfKeys][];
-        this.firstLevelHashFunction = new UniversalHashing<Integer>(this.numberOfKeys);
-        this.secondLevelHashFunctions = (UniversalHashing<Integer>[]) new UniversalHashing<?>[this.numberOfKeys];
+        this.secondLevelHashTables = (T[][]) new Object[numberOfKeys][];
+        this.firstLevelHashFunction = new UniversalHashing<T>(this.numberOfKeys);
+        this.secondLevelHashFunctions = (UniversalHashing<T>[]) new UniversalHashing<?>[this.numberOfKeys];
         this.buildHashTable(keys);
     }
 
-    private void buildHashTable (int[] keys) {
+    private void buildHashTable (T[] keys) {
         this.buildNumberOfCollisions(keys);
         this.buildSecondLevelHashTables(keys);
     }
 
-    private void buildNumberOfCollisions (int[] keys) {
+    private void buildNumberOfCollisions (T[] keys) {
         for(int i=0; i<this.numberOfKeys; i++){
-            int key = keys[i];
+            T key = keys[i];
             int hashValue = this.firstLevelHashFunction.hash(key);
             this.numberOfCollisions[hashValue]++;
         }
     }
 
-    private void buildSecondLevelHashTables (int[] keys) {
+    private void buildSecondLevelHashTables (T[] keys) {
         for(int i=0; i<this.secondLevelHashTables.length; i++){
             if(numberOfCollisions[i] == 0) continue;
-            this.secondLevelHashTables[i] =  new Object[this.numberOfCollisions[i]*this.numberOfCollisions[i]];
-            this.secondLevelHashFunctions[i] = new UniversalHashing<Integer>(this.numberOfCollisions[i]*this.numberOfCollisions[i]);
+            this.secondLevelHashTables[i] =  (T[]) new Object[this.numberOfCollisions[i]*this.numberOfCollisions[i]];
+            this.secondLevelHashFunctions[i] = new UniversalHashing<T>(this.numberOfCollisions[i]*this.numberOfCollisions[i]);
             this.buildHashTable(keys, i);
         }
     }
 
-    private void buildHashTable (int[] keys, int i) {
+    private void buildHashTable (T[] keys, int i) {
         while(true){
             boolean[] isUsed = new boolean[this.numberOfCollisions[i]*this.numberOfCollisions[i]];
             boolean isGood = true;
             for(int j=0; j<this.numberOfKeys; j++){
-                int key = keys[j];
+                T key = keys[j];
                 int hashValue = this.secondLevelHashFunctions[i].hash(key);
                 if(firstLevelHashFunction.hash(key) == i){
                     if(isUsed[hashValue]){
@@ -66,11 +66,11 @@ public class LinearSpacePerfectHashing {
         this.secondLevelHashFunctions[i].regenerateHashFunction();
     }
 
-    public boolean lookUp (int key) {
+    public boolean lookUp (T key) {
         try {
             int hashValue = this.firstLevelHashFunction.hash(key);
             int secondLevelHashValue = this.secondLevelHashFunctions[hashValue].hash(key);
-            return (Object)key == this.secondLevelHashTables[hashValue][secondLevelHashValue];
+            return key == this.secondLevelHashTables[hashValue][secondLevelHashValue];
         } catch (Exception e) {
             return false;
         }
@@ -81,8 +81,8 @@ public class LinearSpacePerfectHashing {
     }
 
     public static void main(String[] args) {
-        int[] keys = {1, 2, 3, 4, 5, 10, 6, 7, 8, 9};
-        LinearSpacePerfectHashing lsh = new LinearSpacePerfectHashing(keys);
+        Integer[] keys = {1, 2, 3, 4, 5, 10, 6, 7, 8, 9};
+        LinearSpacePerfectHashing<Integer> lsh = new LinearSpacePerfectHashing<>(keys);
         System.out.println(lsh.lookUp(1)); // 0
         System.out.println(lsh.lookUp(10)); // 1
         System.out.println(lsh.lookUp(7)); // 6
