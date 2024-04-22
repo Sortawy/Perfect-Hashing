@@ -192,7 +192,6 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         }
         double averageNumberOfCollisions = 1.0 * totalNumberOfCollisions / trails;
         assertTrue(averageNumberOfCollisions <= 2);
-        System.out.println(averageNumberOfCollisions);
     }
 
 }
