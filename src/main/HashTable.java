@@ -10,9 +10,5 @@ public interface HashTable<T> {
 
     int getNumberOfCollisions();
 
-    void rehash(int size);
-
-    boolean isFull();
-
     int getNumberOfItems();
 }
