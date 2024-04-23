@@ -7,14 +7,22 @@ public class LinearSpacePerfectHashing <T> {
     private int numberOfKeys;
     private int numberOfInsertions;
     private int numberOfDeletions;
-    private int numberOfRehashing;
+    private int numberOfCollisions;
     private int[] firstLevelHashTable;
     private T[][] secondLevelHashTables;
+
+    public LinearSpacePerfectHashing () {
+        this.numberOfInsertions = 0;
+        this.numberOfDeletions = 0;
+        this.numberOfCollisions = 0;
+        this.numberOfKeys = 0;
+        this.keys = (T[]) new Object[0];
+    }
 
     public LinearSpacePerfectHashing (T[] keys) {
         this.numberOfInsertions = 0;
         this.numberOfDeletions = 0;
-        this.numberOfRehashing = 0;
+        this.numberOfCollisions = 0;
         this.numberOfKeys = keys.length;
         this.keys = keys;
         this.buildHashTable();
@@ -68,7 +76,7 @@ public class LinearSpacePerfectHashing <T> {
     }
 
     private void rebuildHashTableEntry (int firstLevelIndex) {
-        this.numberOfRehashing++;
+        this.numberOfCollisions++;
         this.secondLevelHashFunctions[firstLevelIndex].regenerateHashFunction();
     }
 
@@ -125,13 +133,23 @@ public class LinearSpacePerfectHashing <T> {
         }
     }
 
-    public int getNumberOfRehashing () {
-        return this.numberOfRehashing;
+    public int getNumberOfCollisions () {
+        return this.numberOfCollisions;
     }
 
     public static void main(String[] args) {
-        Integer[] keys = {1, 2, 3, 4, 5, 10, 6, 7, 8, 9};
-        LinearSpacePerfectHashing<Integer> lsh = new LinearSpacePerfectHashing<>(keys);
+        // Integer[] keys = {1, 2, 3, 4, 5, 10, 6, 7, 8, 9};
+        LinearSpacePerfectHashing<Integer> lsh = new LinearSpacePerfectHashing<>();
+        lsh.insert(1);
+        lsh.insert(2);
+        lsh.insert(3);
+        lsh.insert(4);
+        lsh.insert(5);
+        lsh.insert(10);
+        lsh.insert(6);
+        lsh.insert(7);
+        lsh.insert(8);
+        lsh.insert(9);
         System.out.println(lsh.contains(1)); // 0
         lsh.delete(1);
         System.out.println(lsh.contains(1)); // 0
