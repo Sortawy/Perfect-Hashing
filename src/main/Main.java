@@ -37,7 +37,7 @@ public class Main {
                     }
                     break;
                 case 2: // delete
-                    System.out.println("Enter the string you want to remove from the dictionary: ");
+                    System.out.print("Enter the string you want to remove from the dictionary: ");
                     in.nextLine();
                     input=in.nextLine();
                     dictionary.delete(input);
