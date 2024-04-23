@@ -17,6 +17,7 @@ public class UniversalHashing<T> {
         generateRandomMatrix();
     }
 
+
     public int hash(T key) {
         if(this.hashTableSize == 1) return 0;
         fillVector(key.hashCode());
@@ -28,6 +29,10 @@ public class UniversalHashing<T> {
         generateRandomMatrix();
     }
 
+    public int getHashTableSize() {
+        return hashTableSize;
+    }
+
     private void generateRandomMatrix() {
         for (int i = 0; i < b; i++) {
             for (int j = 0; j < u; j++) {
@@ -36,11 +41,11 @@ public class UniversalHashing<T> {
         }
     }
 
-    private void fillVector(int key) {
-        String binaryKey = Integer.toBinaryString(key);
-        int k = binaryKey.length()-1;
+    private void fillVector(int value) {
+        String binaryKey = Integer.toBinaryString(value);
+        int j = binaryKey.length()-1;
         for (int i = MAX_NUMBER_OF_BITS - 1; i >= 0; i--) {
-            char c = k >= 0 ? binaryKey.charAt(k--) : '0';
+            char c = j >= 0 ? binaryKey.charAt(j--) : '0';
             x[i][0] =  Integer.parseInt(String.valueOf(c));
         }
     }
