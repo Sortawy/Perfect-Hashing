@@ -1,6 +1,6 @@
 package src.main;
 
-public class LinearSpacePerfectHashing <T> {
+public class LinearSpacePerfectHashing <T> implements HashTable<T> {
     private UniversalHashing<T> firstLevelHashFunction;
     private UniversalHashing<T>[] secondLevelHashFunctions;
     private T[] keys;
@@ -111,7 +111,12 @@ public class LinearSpacePerfectHashing <T> {
             int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
             this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
         }
-        else this.buildHashTable();
+        else this.buildHashTable();        // int firstLevelIndex = this.firstLevelHashFunction.hash(key);
+        // int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
+        // if(this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] == key){
+        //     this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
+        //     this.numberOfDeletions++;
+        // }
     }
 
     public boolean contains (T key) {
@@ -126,6 +131,11 @@ public class LinearSpacePerfectHashing <T> {
 
     public int getNumberOfCollisions () {
         return this.numberOfCollisions;
+    }
+
+    @Override
+    public int getNumberOfItems() {
+        return this.numberOfKeys;
     }
 
     public static void main(String[] args) {
