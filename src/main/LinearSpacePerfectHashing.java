@@ -99,7 +99,7 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
         T[] newKeys = (T[]) new Object[this.keys.length-1];
         int index = 0;
         for(int i=0; i<this.keys.length; i++){
-            if(this.keys[i] != key){
+            if(!this.keys[i].equals(key)){
                 newKeys[index] = this.keys[i];
                 index++;
             }
