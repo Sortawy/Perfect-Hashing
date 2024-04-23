@@ -27,7 +27,7 @@ public class Dictionary implements IDictionary {
             this.hashTable=new QuadraticSpaceHashTable<>(INITIAL_SIZE);
         }
         else { // N-Space Solution
-//            this.hashTable=new LinearSpaceHashTable<>(INITIAL_SIZE);
+            this.hashTable= (HashTable<String>) new LinearSpacePerfectHashing<>();
         }
     }
 
@@ -39,8 +39,10 @@ public class Dictionary implements IDictionary {
             this.misses++;
             return;
         }
-        if(this.hashTable.isFull()){
-            this.hashTable.rehash(this.hashTable.getNumberOfItems()*2); // increase capacity and rehash
+        if (this.hashTable instanceof QuadraticSpaceHashTable) {
+            if (((QuadraticSpaceHashTable<String>) this.hashTable).isFull()) {
+                ((QuadraticSpaceHashTable<String>) this.hashTable).rehash(this.hashTable.getNumberOfItems() * 2); // increase capacity and rehash
+            }
         }
         this.hashTable.insert(key);
         if (this.hashTable.contains(key))
@@ -76,7 +78,8 @@ public class Dictionary implements IDictionary {
             return;
         }
         ArrayList<String>toBeAdded=WordReader.readFromFile(file);
-        this.hashTable.rehash(toBeAdded.size()+this.hashTable.getNumberOfItems());
+        if (this.hashTable instanceof QuadraticSpaceHashTable)
+            ((QuadraticSpaceHashTable<String>) this.hashTable).rehash(toBeAdded.size()+this.hashTable.getNumberOfItems());
         for (String word:toBeAdded){
             this.insert(word);
         }
