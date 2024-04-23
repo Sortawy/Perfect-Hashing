@@ -1,19 +1,24 @@
 package src.test;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import src.main.LinearSpacePerfectHashing;
+import src.main.QuadraticSpaceHashTable;
 
 public class TestSupport {
 
-    private final int DEFAULT_UPPER_BOUND = 10_000_000;
+    private final static int DEFAULT_UPPER_BOUND = 10_000_000;
 
     /**
      * Generates a list of random integers.
      * This method generates a list of random integers with a specified size.
      * Each integer in the list is a random number between 0 and default upper bound.
      */
-    protected ArrayList<Integer> generateRandomList(int size) {
-        return generateRandomList(size, DEFAULT_UPPER_BOUND);
+    protected static ArrayList<Integer> generateRandomList(int size) {
+        // return generateRandomList(size, DEFAULT_UPPER_BOUND);
+        return generateRandomList(size,10*size);
     }
 
     /**
@@ -24,7 +29,7 @@ public class TestSupport {
      * @param size the size of the list
      * @param bound the upper bound of the random number
      */
-    protected ArrayList<Integer> generateRandomList(int size, int bound) {
+    protected static ArrayList<Integer> generateRandomList(int size, int bound) {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             list.add(new Random().nextInt(bound));
@@ -76,5 +81,54 @@ public class TestSupport {
         list.add("Engineering");
         return list;
     }
+    
+        public static List<Double> calculateMeanInsertionTime(String hashingType, int[] sizes, int iterations) {
+            //  Random random = new Random();
+             System.out.println("Testing " + hashingType );
+             List<Double> meanTimes = new ArrayList<>();
 
+             for (int size : sizes) {
+                 System.out.println("Testing array size " + size + "...");
+                 long totalTime = 0;
+                 for (int i = 0; i < iterations; i++) {
+                     System.out.println("Iteration " + (i + 1) + "...");
+                     ArrayList<Integer> array = generateRandomList(size);
+
+                     long startTime = System.nanoTime();
+                     switch (hashingType) {
+                        case "LinearSpacePerfectHashing":
+                             LinearSpacePerfectHashing<Integer> perfectHashing = new LinearSpacePerfectHashing<>();
+                             for (Integer key : array) {
+                                 perfectHashing.insert(key);
+                             }
+                        break;
+                        case "QuadraticSpaceHashTable":
+                             QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(size*size);
+                             for (Integer key : array) {
+                                 hashTable.insert(key);
+                             }
+                        break;
+
+                         
+                     }
+                     long endTime = System.nanoTime();
+                     totalTime += (endTime - startTime);
+                 }
+                 double meanTime = (double) totalTime / iterations / 1_000_000; // Convert nanoseconds to milliseconds
+                 meanTimes.add(meanTime);
+             }
+             return meanTimes;
+         }
+    public static void main(String[] args) {
+        // int[] sizes = { 10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000 };
+        int[] sizes = { 10, 50, 100,500};
+        int iterations = 30;
+        System.out.println("Calculating mean insertion times for linear/quadradic hashing...");
+        List<Double> linearSpaceMeanTimes = calculateMeanInsertionTime("LinearSpacePerfectHashing", sizes, iterations);
+        List<Double> quadraticSpaceMeanTimes = calculateMeanInsertionTime("QuadraticSpaceHashTable", sizes, iterations);
+        System.out.println("Array Size\tLinear Hashing\tQuadratic Hashing");
+        for (int i = 0; i < sizes.length; i++) {
+            System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i), quadraticSpaceMeanTimes.get(i));
+        }
+    }
 }
