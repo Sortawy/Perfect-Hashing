@@ -114,8 +114,12 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
         }
         this.keys = newKeys;
         this.numberOfKeys--;
-        this.buildHashTable();
-        // int firstLevelIndex = this.firstLevelHashFunction.hash(key);
+        if(numberOfKeys == 0){
+            int firstLevelIndex = this.firstLevelHashFunction.hash(key);
+            int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
+            this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
+        }
+        else this.buildHashTable();        // int firstLevelIndex = this.firstLevelHashFunction.hash(key);
         // int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
         // if(this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] == key){
         //     this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
