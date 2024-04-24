@@ -18,12 +18,12 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
     }
 
     public void insert(T value) {
-        int key = universalHashing.hash(value);
-
         if(this.contains(value)) return; // ignore duplicates
         if(this.isFull()) {
-            throw new IllegalStateException("Hash Table is full");
+            // throw new IllegalStateException("Hash Table is full");
+            this.rehash(this.getNumberOfItems()*2); // increase capacity and rehash
         }
+        int key = universalHashing.hash(value);
         while (hashTable[key] != null) {  // collision
             numberOfCollisions++;
             rehash();
@@ -100,5 +100,20 @@ public class QuadraticSpaceHashTable<T> implements HashTable<T> {
 
     public int getNumberOfItems() {
         return count;
+    }
+
+    @Override
+    public void batchDelete(T[] keys) {
+        for (T obj : keys) {
+            this.delete(obj);
+        }
+    }
+
+    @Override
+    public void batchInsert(T[] keys) {
+        this.rehash(this.getNumberOfItems()+keys.length);
+        for (T obj : keys) {
+            this.insert(obj);
+        }
     }
 }

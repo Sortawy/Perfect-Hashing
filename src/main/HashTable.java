@@ -11,4 +11,8 @@ public interface HashTable<T> {
     int getNumberOfCollisions();
 
     int getNumberOfItems();
+
+    void batchDelete(T[] keys);
+
+    void batchInsert(T[] keys);
 }

@@ -14,7 +14,17 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
     private int numberOfCollisions;
     private int[] firstLevelHashTable;
     private T[][] secondLevelHashTables;
-
+    public LinearSpacePerfectHashing (int initial_size) {
+        this.firstLevelHashTable = new int[initial_size];
+        this.secondLevelHashTables = (T[][]) new Object[initial_size][];
+        this.firstLevelHashFunction = new UniversalHashing<T>(initial_size);
+        this.secondLevelHashFunctions = (UniversalHashing<T>[]) new UniversalHashing<?>[initial_size];
+        this.numberOfInsertions = 0;
+        this.numberOfDeletions = 0;
+        this.numberOfCollisions = 0;
+        this.numberOfKeys = 0;
+        this.keys = (T[]) new Object[0];
+    }
     public LinearSpacePerfectHashing () {
         this.firstLevelHashTable = new int[10];
         this.secondLevelHashTables = (T[][]) new Object[10][];
