@@ -9,7 +9,7 @@ public class LinearSpacePerfectHashing <T> {
     private int numberOfDeletions;
     private int numberOfRehashing;
     private int[] firstLevelHashTable;
-    private T[][] secondLevelHashTables;
+    private T[][] secondLevelHashTables; 
 
     public LinearSpacePerfectHashing (T[] keys) {
         this.numberOfInsertions = 0;
@@ -31,6 +31,7 @@ public class LinearSpacePerfectHashing <T> {
 
     private void buildFirstLevelHashTable (T[] keys) {
         for(int i=0; i<this.numberOfKeys; i++){
+            // if(keys[i] == null || contains(keys[i])) continue;
             T key = keys[i];
             int firstLevelIndex = this.firstLevelHashFunction.hash(key);
             this.firstLevelHashTable[firstLevelIndex]++;
@@ -52,7 +53,20 @@ public class LinearSpacePerfectHashing <T> {
             boolean isGood = true;
             for(int j=0; j<this.numberOfKeys; j++){
                 T key = keys[j];
+                if(this.contains(key)) continue;
                 int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
+                // for(T k : keys){
+                for(T[] secondLevelHashTable : this.secondLevelHashTables){
+                    if(secondLevelHashTable == null) continue;
+                    for(T k : secondLevelHashTable){
+                        if(k == null) continue;
+                        if(k.equals(key)){
+                            debug();
+                            System.out.println(k + " bsbs " + key);
+                        } 
+                    }
+                }
+                // }
                 if(this.firstLevelHashFunction.hash(key) == firstLevelIndex && !this.contains(key)){
                     if(isUsed[secondLevelIndex]){
                         isGood = false;
@@ -73,53 +87,44 @@ public class LinearSpacePerfectHashing <T> {
     }
 
     public void insert (T key) {
-        if(this.contains(key)) return;
+        if(key == null || this.contains(key)) return;
         this.numberOfInsertions++;
         T[] keys = (T[]) new Object[this.numberOfKeys+1];
         int indx = 0;
         for(T[] secondLevelHashTable : this.secondLevelHashTables){
             if(secondLevelHashTable == null) continue;
             for(T k : secondLevelHashTable){
-                // if(k == null || k.equals(key)) continue;
-                if(k == null ) continue;
+                if(k == null) continue;
                 keys[indx++] = k;
             }
         }
-        // for(int i=0; i<this.secondLevelHashTables.length; i++){
-        //     if(this.secondLevelHashTables[i] == null) continue;
-        //     for(int j=0; j<this.secondLevelHashTables[i].length; j++){
-        //         if(this.secondLevelHashTables[i][j] != null){
-        //             keys[indx++] = this.secondLevelHashTables[i][j];
-        //         }
-        //     }
-        // }
-        if(indx < keys.length) keys[indx] = key;
+        // if(indx < this.numberOfKeys) this.debug();
+        // if(indx == this.numberOfKeys+1) this.debug();
+        for(int i=0; i<this.numberOfKeys+1; i++){
+            System.out.print(keys[i] + " ");
+        }
+        System.out.println();
+        System.out.println("----------------");
+        System.out.println(indx + " " + (this.numberOfKeys+1));
+        System.out.println("----------------");
+
+
+        keys[indx] = key;
         this.numberOfKeys++;
         this.buildHashTable(keys);
+    }
+
+    void debug() {
+
     }
 
     public void delete (T key) {
         if(!this.contains(key)) return;
         this.numberOfDeletions++;
-        T[] keys = (T[]) new Object[this.numberOfKeys-1];
-        int indx = 0;
-        for(T[] secondLevelHashTable : this.secondLevelHashTables){
-            if(secondLevelHashTable == null) continue;
-            for(T k : secondLevelHashTable){
-                if(k == null || k.equals(key)) continue;
-                if(indx < keys.length) keys[indx++] = k;
-            }
-        }
-        // for(int i=0; i<this.secondLevelHashTables.length; i++){
-        //     if(this.secondLevelHashTables[i] == null) continue;
-        //     for(int j=0; j<this.secondLevelHashTables[i].length; j++){
-        //         if(this.secondLevelHashTables[i][j] != null && !this.secondLevelHashTables[i][j].equals(key)){
-        //             keys[indx++] = this.secondLevelHashTables[i][j];
-        //         }
-        //     }
-        // }
+        int firstLevelIndex = this.firstLevelHashFunction.hash(key);
+        int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
+        this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
         this.numberOfKeys--;
-        this.buildHashTable(keys);
     }
 
     public boolean contains (T key) {
