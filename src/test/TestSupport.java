@@ -145,26 +145,29 @@ public class TestSupport {
         return meanCollisions;
     }
      public static void main(String[] args) {
-        // int[] sizes = { 10, 50, 100, 500, 1000, 5000, 10000};
-        int[] sizes = {10, 50, 100,250};
-        int iterations = 100;
+        int[] sizes = { 10, 50, 100, 500, 1000, 5000, 10000};
+        // int[] sizes = {10, 50, 100,250};
+        int iterations = 10;
 
-        // System.out.println("Calculating mean insertion times for linear/quadradic hashing...");
-        // List<Double> linearSpaceMeanTimes = calculateMeanSearchAndInsertionTime("LinearSpacePerfectHashing", sizes, iterations,"x");
-        // List<Double> quadraticSpaceMeanTimes = calculateMeanSearchAndInsertionTime("QuadraticSpaceHashTable", sizes, iterations,"x");
-        // System.out.println("Array Size\tLinear Hashing\tQuadratic Hashing");
-        // for (int i = 0; i < sizes.length; i++) {
-        //     System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i), quadraticSpaceMeanTimes.get(i));
-        //     // System.out.printf("%d\t\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i));
-        //     // System.out.printf("%d\t\t\t%.3f\t\t\n", sizes[i],quadraticSpaceMeanTimes.get(i));
-        // }
-       System.out.println("Calculating Collisions for linear/quadradic hashing...");
-        List<Double> linearSpaceCollisions = calculateCollisions("LinearSpacePerfectHashing", sizes, iterations);
-        List<Double> quadraticSpaceCollisions = calculateCollisions("QuadraticSpaceHashTable", sizes, iterations);
+        System.out.println("Calculating mean insertion times for linear/quadradic hashing...");
+        List<Double> linearSpaceMeanTimes = calculateMeanSearchAndInsertionTime("LinearSpacePerfectHashing", sizes, iterations,"x");
+        List<Double> quadraticSpaceMeanTimes = calculateMeanSearchAndInsertionTime("QuadraticSpaceHashTable", sizes, iterations,"x");
         System.out.println("Array Size\tLinear Hashing\tQuadratic Hashing");
         for (int i = 0; i < sizes.length; i++) {
-            System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceCollisions.get(i), quadraticSpaceCollisions.get(i));
+            System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i), quadraticSpaceMeanTimes.get(i));
+            // System.out.printf("%d\t\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i));
+            // System.out.printf("%d\t\t\t%.3f\t\t\n", sizes[i],quadraticSpaceMeanTimes.get(i));
         }
-        // System.out.println("Done!");
+
+
+
+
+    //    System.out.println("Calculating Collisions for linear/quadradic hashing...");
+    //     List<Double> linearSpaceCollisions = calculateCollisions("LinearSpacePerfectHashing", sizes, iterations);
+    //     List<Double> quadraticSpaceCollisions = calculateCollisions("QuadraticSpaceHashTable", sizes, iterations);
+    //     System.out.println("Array Size\tLinear Hashing\tQuadratic Hashing");
+    //     for (int i = 0; i < sizes.length; i++) {
+    //         System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceCollisions.get(i), quadraticSpaceCollisions.get(i));
+    //     }
     }
 }
