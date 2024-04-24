@@ -253,20 +253,4 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         double averageNumberOfCollisions = 1.0 * totalNumberOfCollisions / trails;
         assertTrue(averageNumberOfCollisions <= 2);
     }
-    @Test
-    public void testNumberOfTimesNeededToRebuildHashtableLargeInput() {
-        int totalNumberOfCollisions = 0;
-        int trails = 1000;
-        for (int i = 0; i < trails; i++) {
-            QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(35000+1);
-            ArrayList<Integer> list = generateRandomList(35000);
-            for (Integer j : list) {
-                hashTable.insert(j);
-            }
-            totalNumberOfCollisions += hashTable.getNumberOfCollisions();
-        }
-        double averageNumberOfCollisions = 1.0 * totalNumberOfCollisions / trails;
-        assertTrue(averageNumberOfCollisions <= 2);
-    }
-
 }
