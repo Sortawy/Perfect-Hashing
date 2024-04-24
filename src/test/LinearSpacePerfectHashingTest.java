@@ -2,6 +2,7 @@ package src.test;
 
 import org.junit.Test;
 import src.main.LinearSpacePerfectHashing;
+import src.main.QuadraticSpaceHashTable;
 
 import java.util.ArrayList;
 
@@ -168,8 +169,25 @@ public class LinearSpacePerfectHashingTest extends TestSupport{
         assertEquals(list.size(), hashTable.getNumberOfItems());
     }
 
-//    @Test
-//    public void testNumberOfTimesNeededToRebuildHashtable() {
-//
-//    }
+    @Test
+    public void testNumberOfTimesNeededToRebuildHashtable() {
+        int totalNumberOfCollisionsOfQuadraticSpace = 0;
+        int totalNumberOfCollisionsOfLinearSpace = 0;
+        int trails = 1000;
+        for (int i = 0; i < trails; i++) {
+            QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(1000);
+            LinearSpacePerfectHashing<Integer> linearSpaceTable = new LinearSpacePerfectHashing<>(1000);
+            ArrayList<Integer> list = generateRandomList(500);
+            for (Integer j : list) {
+                hashTable.insert(j);
+                linearSpaceTable.insert(j);
+            }
+            totalNumberOfCollisionsOfQuadraticSpace += hashTable.getNumberOfCollisions();
+            totalNumberOfCollisionsOfLinearSpace += linearSpaceTable.getNumberOfCollisions();
+        }
+        double averageNumberOfCollisionsInLinear = 1.0 * totalNumberOfCollisionsOfLinearSpace / trails;
+        double averageNumberOfCollisionsInQuadratic = 1.0 * totalNumberOfCollisionsOfQuadraticSpace / trails;
+        assertTrue(averageNumberOfCollisionsInLinear > averageNumberOfCollisionsInQuadratic);
+
+    }
 }
