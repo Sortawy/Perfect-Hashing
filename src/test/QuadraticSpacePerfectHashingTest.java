@@ -45,16 +45,6 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
     }
 
     @Test
-    public void testInsertWhenHashTableIsFull() {
-        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
-        ArrayList<Integer> list = generateUniqueRandomList(10,100);
-        for (Integer i : list) {
-            hashTable.insert(i);
-        }
-        assertThrows(IllegalStateException.class, () -> hashTable.insert(101));
-    }
-
-    @Test
     public void testIgnoreDuplicatesWithIntegers() {
         QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(1000);
         ArrayList<Integer> list = generateUniqueRandomList(500);

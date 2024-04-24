@@ -42,8 +42,7 @@ public class DictionaryTest extends TestSupport {
         ArrayList<String> list = getListOfStrings();
         for (String i : list) {
             dictionary.insert(i);
-            assertEquals(1, dictionary.getHits());
-            assertEquals(0, dictionary.getMisses());
+            assertEquals(1, dictionary.getChangeInSize());
         }
     }
 
@@ -56,8 +55,7 @@ public class DictionaryTest extends TestSupport {
         }
         for (String i : list) {
             dictionary.insert(i); // duplicates so misses increase
-            assertEquals(1, dictionary.getMisses());
-            assertEquals(0, dictionary.getHits());
+            assertEquals(0, dictionary.getChangeInSize());
         }
     }
 
@@ -70,8 +68,7 @@ public class DictionaryTest extends TestSupport {
         }
         for (String i : list) {
             dictionary.delete(i);
-            assertEquals(1, dictionary.getHits());
-            assertEquals(0, dictionary.getMisses());
+            assertEquals(-1, dictionary.getChangeInSize());
         }
     }
 
@@ -88,8 +85,7 @@ public class DictionaryTest extends TestSupport {
         list2.add("jjjj");
         for (String i : list2) {
             dictionary.delete(i); // not in the dictionary so misses increase
-            assertEquals(1, dictionary.getMisses());
-            assertEquals(0, dictionary.getHits());
+            assertEquals(0, dictionary.getChangeInSize());
         }
     }
 }
