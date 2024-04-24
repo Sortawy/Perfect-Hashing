@@ -19,7 +19,7 @@ public class Dictionary implements IDictionary {
      * input and creates a new empty dictionary based on it.
      * @param hashing_type : Type of the backend perfect hashing (N/N^2) space solutions.
      */
-    Dictionary(String hashing_type){
+    public Dictionary(String hashing_type){
         this.resetCounters();
         this.isBatch=false;
         int INITIAL_SIZE = 10;
