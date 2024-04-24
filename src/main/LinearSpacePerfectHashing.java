@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LinearSpacePerfectHashing <T> {
+public class LinearSpacePerfectHashing <T> implements HashTable<T> {
     private UniversalHashing<T> firstLevelHashFunction;
     private UniversalHashing<T>[] secondLevelHashFunctions;
     private T[] keys;
@@ -169,6 +169,11 @@ public class LinearSpacePerfectHashing <T> {
     
     public int getNumberOfCollisions () {
         return this.numberOfCollisions;
+    }
+
+    @Override
+    public int getNumberOfItems(){
+        return this.numberOfKeys;
     }
     
     public static void main(String[] args) {
