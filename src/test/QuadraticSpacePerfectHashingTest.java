@@ -229,6 +229,26 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
     }
 
     @Test
+    public void testInsertTillHashTableIsFullAfterRehash() {
+        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
+        ArrayList<Integer> list = generateUniqueRandomList(10);
+        for (Integer i : list) {
+            hashTable.insert(i);
+        }
+        hashTable.rehash(100);
+        ArrayList<Integer> list2 = generateUniqueRandomList(90);
+        for (Integer i : list2) {
+            hashTable.insert(i);
+        }
+        ArrayList<Integer> combinedLists = new ArrayList<>(list);
+        combinedLists.addAll(list2);
+        for (Integer i : combinedLists) {
+            assertTrue(hashTable.contains(i));
+        }
+        assertEquals(hashTable.getNumberOfItems(), 100);
+        assertTrue(hashTable.isFull());
+    }
+    @Test
     public void testNumberOfTimesNeededToRebuildHashtable() {
         int totalNumberOfCollisions = 0;
         int trails = 1000;
