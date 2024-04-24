@@ -27,7 +27,7 @@ public class Dictionary implements IDictionary {
             this.hashTable=new QuadraticSpaceHashTable<>(INITIAL_SIZE);
         }
         else { // N-Space Solution
-            this.hashTable= new LinearSpacePerfectHashing<>();
+            this.hashTable= (HashTable<String>) new LinearSpacePerfectHashing<>();
         }
     }
 
