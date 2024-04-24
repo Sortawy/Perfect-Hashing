@@ -35,4 +35,10 @@ public interface IDictionary {
      * @param file_path : The path to the text file containing the words to deleted.
      */
     void batchDelete(String file_path);
+
+    int getRehashCount();
+
+    int getCurrentNumberOfItems();
+
+    int getChangeInSize();
 }
