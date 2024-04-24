@@ -161,7 +161,7 @@ public class LinearSpacePerfectHashing <T> {
         try {
             int firstLevelIndex = this.firstLevelHashFunction.hash(key);
             int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
-            return key == this.secondLevelHashTables[firstLevelIndex][secondLevelIndex];
+            return key.equals(this.secondLevelHashTables[firstLevelIndex][secondLevelIndex]);
         } catch (Exception e) {
             return false;
         }
