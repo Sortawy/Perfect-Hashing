@@ -125,6 +125,8 @@ public class LinearSpacePerfectHashing <T> {
         this.buildHashTable(this.keys);
     }
 
+
+
     public void insert (T key) {
         if(this.contains(key)) return;
         this.numberOfInsertions++;
@@ -155,6 +157,12 @@ public class LinearSpacePerfectHashing <T> {
         int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
         this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
         this.numberOfKeys--;
+    }
+
+    public void batchDelete (T[] keys) {
+        for(int i=0; i<keys.length; i++){
+            this.delete(keys[i]);
+        }
     }
 
     public boolean contains (T key) {
