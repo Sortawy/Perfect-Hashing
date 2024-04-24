@@ -1,6 +1,9 @@
 package src.test;
 
 import org.junit.Test;
+
+import src.main.LinearSpacePerfectHashing;
+import src.main.QuadraticSpaceHashTable;
 import src.main.UniversalHashing;
 
 import java.util.ArrayList;
@@ -61,5 +64,5 @@ public class UniversalHashingTest extends TestSupport{
                 assertTrue(universalHashing.hash(i) < universalHashing.getHashTableSize());
          }
     }
-
+   
 }

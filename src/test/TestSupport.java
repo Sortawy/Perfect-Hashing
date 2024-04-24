@@ -1,30 +1,23 @@
 package src.test;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import src.main.LinearSpacePerfectHashing;
+import src.main.QuadraticSpaceHashTable;
 
 public class TestSupport {
 
-    private final int DEFAULT_UPPER_BOUND = 10_000_000;
+    private final static int DEFAULT_UPPER_BOUND = 10_000_000;
 
-    /**
-     * Generates a list of random integers.
-     * This method generates a list of random integers with a specified size.
-     * Each integer in the list is a random number between 0 and default upper bound.
-     */
-    protected ArrayList<Integer> generateRandomList(int size) {
-        return generateRandomList(size, DEFAULT_UPPER_BOUND);
+  
+    protected static ArrayList<Integer> generateRandomList(int size) {
+        // return generateRandomList(size, DEFAULT_UPPER_BOUND);
+        return generateRandomList(size,1000*size);
     }
 
-    /**
-     * Generates a list of random integers.
-     * This method generates a list of random integers with a specified size.
-     * Each integer in the list is a random number between 0 and the specified bound.
-     *
-     * @param size the size of the list
-     * @param bound the upper bound of the random number
-     */
-    protected ArrayList<Integer> generateRandomList(int size, int bound) {
+    protected static ArrayList<Integer> generateRandomList(int size, int bound) {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             list.add(new Random().nextInt(bound));
@@ -32,24 +25,10 @@ public class TestSupport {
         return list;
     }
 
-     /**
-     * Generates a list of unique random integers.
-     * This method generates a list of random integers with a specified size.
-     * Each integer in the list is a random number between 0 and default upper bound.
-     */
     protected ArrayList<Integer> generateUniqueRandomList(int size) {
         return generateUniqueRandomList(size, DEFAULT_UPPER_BOUND);
     }
 
-
-    /**
-     * Generates a list unique of random integers.
-     * This method generates a list of random integers with a specified size.
-     * Each integer in the list is a random number between 0 and the specified bound.
-     *
-     * @param size the size of the list
-     * @param bound the upper bound of the random number
-     */
     protected ArrayList<Integer> generateUniqueRandomList(int size, int bound) {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -76,5 +55,117 @@ public class TestSupport {
         list.add("Engineering");
         return list;
     }
+    
+        
+    public static List<Double> calculateMeanSearchAndInsertionTime(String hashingType, int[] sizes, int iterations,String comparison) {
+            System.out.println("Testing "+ comparison + " " + hashingType);
 
+            List<Double> meanTimes = new ArrayList<>();
+
+            for (int size : sizes) {
+                System.out.println("Testing array size " + size + "...");
+                long totalTime = 0;
+                for (int i = 0; i < iterations; i++) {
+                    System.out.println("Iteration " + (i + 1) + "...");
+                   ArrayList<Integer> randoms = generateRandomList(size);
+                    Integer[] array = randoms.toArray(new Integer[randoms.size()]);
+                   //  if(size==500)
+                   //  System.out.println(randoms);
+
+                    long startTime = System.nanoTime();
+                    switch (hashingType) {
+                       case "LinearSpacePerfectHashing":
+                            LinearSpacePerfectHashing<Integer> perfectHashing = new LinearSpacePerfectHashing<Integer>();
+                            for (Integer key : array) {
+                                perfectHashing.insert(key);
+                            }
+                            if(comparison.equals("search")){
+                                startTime = System.nanoTime();
+                             for (Integer key : array) {
+                                perfectHashing.contains(key);
+                                }
+                            }
+                       break;
+                       case "QuadraticSpaceHashTable":
+                            QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(size+1);
+                            for (Integer key : array) {
+                                hashTable.insert(key);
+                            }
+                            if(comparison.equals("search")){
+                                startTime = System.nanoTime();
+                             for (Integer key : array) {
+                                hashTable.contains(key);
+                             }
+                            }
+                       break;
+                    }
+                    long endTime = System.nanoTime();
+                    totalTime += (endTime - startTime);
+                }
+                double meanTime = (double) totalTime / iterations / 1_000_000; // Convert nanoseconds to milliseconds
+                meanTimes.add(meanTime);
+            }
+            return meanTimes;
+         }
+    
+    public static List<Double> calculateCollisions(String hashingType, int[] sizes, int iterations) {
+        System.out.println("Testing collisions for " + hashingType);
+
+        List<Double> meanCollisions = new ArrayList<>();
+
+        for (int size : sizes) {
+            System.out.println("Testing array size " + size + "...");
+            long totalCollisions = 0;
+            for (int i = 0; i < iterations; i++) {
+                System.out.println("Iteration " + (i + 1) + "...");
+                ArrayList<Integer> randoms = generateRandomList(size);
+                Integer[] array = randoms.toArray(new Integer[randoms.size()]);
+                long collisions = 0;
+                switch (hashingType) {
+                    case "LinearSpacePerfectHashing":
+                        LinearSpacePerfectHashing<Integer> perfectHashing = new LinearSpacePerfectHashing<Integer>();
+                        perfectHashing.batchInsert(array);
+                        // for (Integer key : array) {
+                        //     perfectHashing.insert(key);
+                        // }
+                        collisions = perfectHashing.getNumberOfCollisions();
+                        break;
+                    case "QuadraticSpaceHashTable":
+                        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(size+1);
+                        for (Integer key : array) {
+                            hashTable.insert(key);
+                        }
+                        collisions = hashTable.getNumberOfCollisions();
+                        break;
+                }
+                totalCollisions += collisions;
+            }
+            double meanCollision = (double) totalCollisions / iterations;
+            meanCollisions.add(meanCollision);
+        }
+        return meanCollisions;
+    }
+     public static void main(String[] args) {
+        int[] sizes = { 10,25,50,100,250,500,1000,2500,5000,10000,15000};
+        // int[] sizes = {10, 50, 100,250};
+        int iterations = 2;
+
+        System.out.println("Calculating mean insertion times for linear/quadradic hashing...");
+        List<Double> linearSpaceMeanTimes = calculateMeanSearchAndInsertionTime("LinearSpacePerfectHashing", sizes, iterations,"s");
+        List<Double> quadraticSpaceMeanTimes = calculateMeanSearchAndInsertionTime("QuadraticSpaceHashTable", sizes, iterations,"s");
+        System.out.println("Array Size\tLinear Hashing\tQuadratic Hashing");
+        for (int i = 0; i < sizes.length; i++) {
+            System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i), quadraticSpaceMeanTimes.get(i));
+            // System.out.printf("%d\t\t\t%.3f\t\t\n", sizes[i], linearSpaceMeanTimes.get(i));
+            // System.out.printf("%d\t\t\t%.3f\t\t\n", sizes[i],quadraticSpaceMeanTimes.get(i));
+        }
+
+    //    System.out.println("Calculating Collisions for linear/quadradic hashing...");
+    //     List<Double> linearSpaceCollisions = calculateCollisions("LinearSpacePerfectHashing", sizes, iterations);
+    //     List<Double> quadraticSpaceCollisions = calculateCollisions("QuadraticSpaceHashTable", sizes, iterations);
+    //     System.out.println("Array Size\tLinear Hashing\tQuadratic Hashing");
+    //     for (int i = 0; i < sizes.length; i++) {
+    //         System.out.printf("%d\t\t%.3f\t\t%.3f\t\t\n", sizes[i], linearSpaceCollisions.get(i), quadraticSpaceCollisions.get(i));
+    //     }
+    }
 }
