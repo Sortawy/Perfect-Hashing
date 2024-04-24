@@ -45,16 +45,6 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
     }
 
     @Test
-    public void testInsertWhenHashTableIsFull() {
-        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
-        ArrayList<Integer> list = generateUniqueRandomList(10,100);
-        for (Integer i : list) {
-            hashTable.insert(i);
-        }
-        assertThrows(IllegalStateException.class, () -> hashTable.insert(101));
-    }
-
-    @Test
     public void testIgnoreDuplicatesWithIntegers() {
         QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(1000);
         ArrayList<Integer> list = generateUniqueRandomList(500);
@@ -228,6 +218,26 @@ public class QuadraticSpacePerfectHashingTest extends TestSupport {
         assertEquals(hashTable.getNumberOfItems(), 8);
     }
 
+    @Test
+    public void testInsertTillHashTableIsFullAfterRehash() {
+        QuadraticSpaceHashTable<Integer> hashTable = new QuadraticSpaceHashTable<>(10);
+        ArrayList<Integer> list = generateUniqueRandomList(10);
+        for (Integer i : list) {
+            hashTable.insert(i);
+        }
+        hashTable.rehash(100);
+        ArrayList<Integer> list2 = generateUniqueRandomList(90);
+        for (Integer i : list2) {
+            hashTable.insert(i);
+        }
+        ArrayList<Integer> combinedLists = new ArrayList<>(list);
+        combinedLists.addAll(list2);
+        for (Integer i : combinedLists) {
+            assertTrue(hashTable.contains(i));
+        }
+        assertEquals(hashTable.getNumberOfItems(), 100);
+        assertTrue(hashTable.isFull());
+    }
     @Test
     public void testNumberOfTimesNeededToRebuildHashtable() {
         int totalNumberOfCollisions = 0;

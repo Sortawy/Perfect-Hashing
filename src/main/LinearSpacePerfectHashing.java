@@ -1,11 +1,10 @@
 package src.main;
 
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LinearSpacePerfectHashing <T> {
+public class LinearSpacePerfectHashing <T> implements HashTable<T> {
     private UniversalHashing<T> firstLevelHashFunction;
     private UniversalHashing<T>[] secondLevelHashFunctions;
     private T[] keys;
@@ -15,7 +14,17 @@ public class LinearSpacePerfectHashing <T> {
     private int numberOfCollisions;
     private int[] firstLevelHashTable;
     private T[][] secondLevelHashTables;
-
+    public LinearSpacePerfectHashing (int initial_size) {
+        this.firstLevelHashTable = new int[initial_size];
+        this.secondLevelHashTables = (T[][]) new Object[initial_size][];
+        this.firstLevelHashFunction = new UniversalHashing<T>(initial_size);
+        this.secondLevelHashFunctions = (UniversalHashing<T>[]) new UniversalHashing<?>[initial_size];
+        this.numberOfInsertions = 0;
+        this.numberOfDeletions = 0;
+        this.numberOfCollisions = 0;
+        this.numberOfKeys = 0;
+        this.keys = (T[]) new Object[0];
+    }
     public LinearSpacePerfectHashing () {
         this.firstLevelHashTable = new int[10];
         this.secondLevelHashTables = (T[][]) new Object[10][];
@@ -52,8 +61,9 @@ public class LinearSpacePerfectHashing <T> {
     }
 
     private void buildFirstLevelHashTable (T[] keys) {
-        for(int i=0; i<this.numberOfKeys; i++){
+        for(int i=0; i<this.keys.length; i++){
             T key = keys[i];
+            if(key == null) continue;
             int firstLevelIndex = this.firstLevelHashFunction.hash(key);
             this.firstLevelHashTable[firstLevelIndex]++;
         }
@@ -74,8 +84,9 @@ public class LinearSpacePerfectHashing <T> {
         T[] collisionKeys = (T[]) new Object[this.firstLevelHashTable[firstLevelIndex]];
         int index = 0;
         Set<T> set = new HashSet<>();
-        for (int i = 0; i < this.numberOfKeys; i++) {
+        for (int i = 0; i < this.keys.length; i++) {
             T key = keys[i];
+            if(key == null) continue;
             if (this.firstLevelHashFunction.hash(key) == firstLevelIndex && set.add(key)) {
                 collisionKeys[index++] = key;
             }
@@ -92,7 +103,6 @@ public class LinearSpacePerfectHashing <T> {
         while(true){
             boolean[] isUsed = new boolean[size*size];
             boolean isGood = true;
-
             for(int i=0; i<size; i++){
                 T key = collisionKeys[i];
                 if(key == null) continue;
@@ -121,17 +131,33 @@ public class LinearSpacePerfectHashing <T> {
     public void batchInsert (T[] keys) {
         this.keys = Arrays.copyOf(this.keys, this.keys.length+keys.length);
         for(int i=0; i<keys.length; i++){
-            this.keys[i+this.keys.length-keys.length] = keys[i];
+            boolean found = false;
+            // check if keys[i] is already present
+            for (int j = 0; j < this.keys.length; j++) {
+                if (this.keys[j]==null)continue;
+                if (keys[i].equals(this.keys[j])) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                this.keys[i + this.keys.length - keys.length] = keys[i];
+            }
         }
-        this.numberOfKeys = this.keys.length;
+        this.numberOfKeys =0;
+        for (int i = 0;i <this.keys.length; i++){
+            if (this.keys[i]!=null)
+                this.numberOfKeys++;
+        }
         this.buildHashTable(this.keys);
     }
+
+
 
     public void insert (T key) {
         if(this.contains(key)) return;
         this.numberOfInsertions++;
         this.numberOfKeys++;
-
 
         this.keys = Arrays.copyOf(this.keys, this.keys.length+1);
         this.keys[this.keys.length-1] = key;
@@ -149,18 +175,21 @@ public class LinearSpacePerfectHashing <T> {
         }else{
             this.rehashTableEntry(firstLevelIndex, key);
         }
-
     }
 
     public void delete (T key) {
         if(!this.contains(key)) return;
         this.numberOfDeletions++;
-
         int firstLevelIndex = this.firstLevelHashFunction.hash(key);
         int secondLevelIndex = this.secondLevelHashFunctions[firstLevelIndex].hash(key);
         this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = null;
         this.numberOfKeys--;
+    }
 
+    public void batchDelete (T[] keys) {
+        for(int i=0; i<keys.length; i++){
+            this.delete(keys[i]);
+        }
     }
 
     public boolean contains (T key) {
@@ -177,6 +206,10 @@ public class LinearSpacePerfectHashing <T> {
         return this.numberOfCollisions;
     }
 
+    @Override
+    public int getNumberOfItems(){
+        return this.numberOfKeys;
+    }
     
     public static void main(String[] args) {
         LinearSpacePerfectHashing<Integer> lsh = new LinearSpacePerfectHashing<>();
@@ -258,7 +291,6 @@ public class LinearSpacePerfectHashing <T> {
         lsh.batchInsert(keyss);
         System.out.println(lsh.contains(50)); // 1
         System.out.println(lsh.contains(1550)); // 1
-
     }
     
 }
