@@ -12,11 +12,11 @@ hashing a value **(x)** and get a key **h(x)** by matrix multiplication of a ran
 
 ![Untitled](./assets/Untitled.png)
 
-## O( N$^2$) Space Solution Perfect Hashing
+## O( N²) Space Solution Perfect Hashing
 
 ---
 
-Allocating a hash table size based on the square of the input size **(N$^2$)** to minimize collision probability at the cost of increased space usage. Universal hashing is used to generate the hash function
+Allocating a hash table size based on the square of the input size **(N²)** to minimize collision probability at the cost of increased space usage. Universal hashing is used to generate the hash function
 
 it includes these **Operations: Insert, Delete, Contains**
 
@@ -35,7 +35,7 @@ Linear Space Perfect Hashing uses a two-level hash table design to achieve near-
 - Each key is initially hashed to a bucket in the first-level hash table. The size of each second-level hash table is squared based on the number of collisions in its respective bucket, minimizing the need for rehashing.
 - When collisions occur at the second level, the hash function for that specific bucket is regenerated until a collision-free arrangement is found. This is statistically efficient due to the self-adjusting size of second-level tables.
 
-## **Comparison between** O( **N$^2$**) & O( N ) Space Solution
+## **Comparison between** O(N²) & O( N ) Space Solution
 
 ---
 
@@ -54,7 +54,7 @@ The **`MeanTime`** class facilitates the evaluation of Perfect Hashing algorithm
 
 ## Mean Insertion Time Comparison (MS)
 
-| Array Size | O( N ) Space Time  |  O( N$^2$ ) Space Time  |
+| Array Size | O( N ) Space Time  |  O( N² ) Space Time  |
 | --- | --- | --- |
 | 10 | 0.494 | 0.132 |
 | 25 | 0.502 | 0.061 |
@@ -72,7 +72,7 @@ The **`MeanTime`** class facilitates the evaluation of Perfect Hashing algorithm
 
 ## Mean Search For an element Time Comparison (MS)
 
-| Array size | O( N ) Space Time |  O( N$^2$ ) Space Time  |
+| Array size | O( N ) Space Time |  O( N² ) Space Time  |
 | --- | --- | --- |
 | 10 | 0.005 | 0.001 |
 | 25 | 0.003 | 0.001 |
@@ -90,7 +90,7 @@ The **`MeanTime`** class facilitates the evaluation of Perfect Hashing algorithm
 
 ## Collisions Comparison
 
-| Array size  |  O( N ) Space Collisions  |  O( N$^2$ ) Space collisions  | O( N ) Space Time average collisions per 100 iterations | O( N$^2$ ) Space Time average collisions per 100 iterations |
+| Array size  |  O( N ) Space Collisions  |  O( N² ) Space collisions  | O( N ) Space Time average collisions per 100 iterations | O( N² ) Space Time average collisions per 100 iterations |
 | --- | --- | --- | --- | --- |
 | 10 | 0 | 2 | 0.870 | 0.400 |
 | 25 | 6 | 0 | 2.840   | 0.550 |
@@ -132,7 +132,7 @@ line. And tries to delete all that words from the dictionary.
 ---
 
 1. **Initialize:**
-    - Accepts the type of the backend perfect hashing (O(N) or O(N^2)) as an initial input.
+    - Accepts the type of the backend perfect hashing (O(N) or O(N²)) as an initial input.
     - Creates a new empty dictionary based on the selected hashing type.
 2. **Insert:**
     - Allows the user to insert a single string key into the dictionary.
