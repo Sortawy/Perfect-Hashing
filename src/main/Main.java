@@ -19,6 +19,8 @@ public class Main {
             printMenu();
             choice = in.nextInt();
             String input;
+            int changes;
+            int batch_duplicates;
             switch (choice) {
                 case 1: // insert
                     System.out.print("Enter the string you want to add to the dictionary: ");
@@ -26,14 +28,12 @@ public class Main {
                     input= in.nextLine();
                     System.out.println();
                     dictionary.insert(input);
-                    if (dictionary.getHits()==1){
+                    changes = dictionary.getChangeInSize();
+                    if (changes==1){
                         System.out.println("The word "+"\""+input+"\""+" is successfully inserted.");
                     }
-                    else if (dictionary.getMisses()==1){
+                    else if (changes==0){
                         System.out.println("The word "+"\""+input+"\""+" already exists.");
-                    }
-                    else {
-                        System.out.println("Error, hits ==  misses !"); // shouldn't occur
                     }
                     break;
                 case 2: // delete
@@ -41,14 +41,12 @@ public class Main {
                     in.nextLine();
                     input=in.nextLine();
                     dictionary.delete(input);
-                    if (dictionary.getHits()==1){
+                    changes=dictionary.getChangeInSize();
+                    if (changes==-1){
                         System.out.println("The word "+"\""+input+"\""+" is successfully deleted.");
                     }
-                    else if (dictionary.getMisses()==1){
+                    else if (changes==0){
                         System.out.println("The word "+"\""+input+"\""+" does not exist.");
-                    }
-                    else {
-                        System.out.println("Error, hits ==  misses !"); // shouldn't occur
                     }
                     break;
                 case 3: // search
@@ -67,8 +65,10 @@ public class Main {
                     in.nextLine();
                     input = in.nextLine();
                     dictionary.batchInsert(input);
-                    System.out.println("Count of newly added strings: " + dictionary.getHits());
-                    System.out.println("Count of already existing strings: " + dictionary.getMisses());
+                    changes= dictionary.getChangeInSize();
+                    batch_duplicates= dictionary.getPreviousBatchSize()-changes;
+                    System.out.println("Count of newly added strings: " + changes);
+                    System.out.println("Count of already existing strings: " + batch_duplicates);
                     break;
                 case 5: // batch delete
                     System.out.print("Enter the path of the file you want to batch delete from: ");
@@ -76,8 +76,10 @@ public class Main {
                     input = in.nextLine();
                     dictionary.batchDelete(input);
                     // results
-                    System.out.println("Count of successfully deleted strings: " + dictionary.getHits());
-                    System.out.println("Count of non existing strings: "+ dictionary.getMisses());
+                    changes=dictionary.getChangeInSize();
+                    batch_duplicates=dictionary.getPreviousBatchSize()-Math.abs(changes);
+                    System.out.println("Count of successfully deleted strings: " + Math.abs(changes));
+                    System.out.println("Count of non-existing strings: "+ batch_duplicates);
                     break;
                 case 6: // exit
                     in.close();
@@ -89,6 +91,7 @@ public class Main {
             }
 
             System.out.println("Number of rehashes due to collisions: " +dictionary.getRehashCount());
+            System.out.println("Total number of words in dictionary: " + dictionary.getCurrentNumberOfItems());
         }
     }
     static void printMenu(){

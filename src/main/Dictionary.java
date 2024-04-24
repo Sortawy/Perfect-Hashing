@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Dictionary implements IDictionary {
-    private int hits; /* count of successful operations */
-    private int misses; /* count of failed operations */
     private HashTable<String> hashTable;
+    private int previous_size=0;
+    private int previous_batch_size=0;
 
     Dictionary(){}
 
@@ -35,11 +35,13 @@ public class Dictionary implements IDictionary {
         //         ((QuadraticSpaceHashTable<String>) this.hashTable).rehash(this.hashTable.getNumberOfItems() * 2); // increase capacity and rehash
         //     }
         // }
+        this.previous_size=this.getCurrentNumberOfItems();
         this.hashTable.insert(key);
     }
 
     @Override
     public void delete(String key) {
+        this.previous_size=this.getCurrentNumberOfItems();
         this.hashTable.delete(key);
     }
 
@@ -56,6 +58,8 @@ public class Dictionary implements IDictionary {
             return;
         }
         String[]toBeAdded=WordReader.readFromFile(file);
+        this.previous_size=this.getCurrentNumberOfItems();
+        this.previous_batch_size=toBeAdded.length;
         // if (this.hashTable instanceof QuadraticSpaceHashTable)
         //     ((QuadraticSpaceHashTable<String>) this.hashTable).rehash(toBeAdded.length+this.hashTable.getNumberOfItems());
         this.hashTable.batchInsert(toBeAdded);
@@ -69,31 +73,28 @@ public class Dictionary implements IDictionary {
             return;
         }
         String [] toBeDeleted=WordReader.readFromFile(file);
+        this.previous_size=this.getCurrentNumberOfItems();
+        this.previous_batch_size=toBeDeleted.length;
         this.hashTable.batchDelete(toBeDeleted);
-    }
-
-    /**
-     * Method resets the counters of hits and misses
-     */
-    public void resetCounters(){
-        this.hits=0;
-        this.misses=0;
-    }
-
-    public int getHits() {
-        return hits;
-    }
-
-    public int getMisses() {
-        return misses;
     }
 
     public int getRehashCount(){
         return this.hashTable.getNumberOfCollisions();
     }
 
+    public int getCurrentNumberOfItems(){
+        return this.hashTable.getNumberOfItems();
+    }
+    public int getPreviousNumberOfItems(){
+        return this.previous_size;
+    }
+    public int getChangeInSize(){
+        return this.getCurrentNumberOfItems()-this.getPreviousNumberOfItems();
+    }
 
-
+    public int getPreviousBatchSize(){
+        return this.previous_batch_size;
+    }
     static class WordReader {
         /**
          * Method to read the words in the file line by line

@@ -61,8 +61,9 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
     }
 
     private void buildFirstLevelHashTable (T[] keys) {
-        for(int i=0; i<this.numberOfKeys; i++){
+        for(int i=0; i<this.keys.length; i++){
             T key = keys[i];
+            if(key == null) continue;
             int firstLevelIndex = this.firstLevelHashFunction.hash(key);
             this.firstLevelHashTable[firstLevelIndex]++;
         }
@@ -83,8 +84,9 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
         T[] collisionKeys = (T[]) new Object[this.firstLevelHashTable[firstLevelIndex]];
         int index = 0;
         Set<T> set = new HashSet<>();
-        for (int i = 0; i < this.numberOfKeys; i++) {
+        for (int i = 0; i < this.keys.length; i++) {
             T key = keys[i];
+            if(key == null) continue;
             if (this.firstLevelHashFunction.hash(key) == firstLevelIndex && set.add(key)) {
                 collisionKeys[index++] = key;
             }
@@ -129,9 +131,24 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
     public void batchInsert (T[] keys) {
         this.keys = Arrays.copyOf(this.keys, this.keys.length+keys.length);
         for(int i=0; i<keys.length; i++){
-            this.keys[i+this.keys.length-keys.length] = keys[i];
+            boolean found = false;
+            // check if keys[i] is already present
+            for (int j = 0; j < this.keys.length; j++) {
+                if (this.keys[j]==null)continue;
+                if (keys[i].equals(this.keys[j])) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                this.keys[i + this.keys.length - keys.length] = keys[i];
+            }
         }
-        this.numberOfKeys = this.keys.length;
+        this.numberOfKeys =0;
+        for (int i = 0;i <this.keys.length; i++){
+            if (this.keys[i]!=null)
+                this.numberOfKeys++;
+        }
         this.buildHashTable(this.keys);
     }
 
