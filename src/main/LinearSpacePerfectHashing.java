@@ -169,9 +169,9 @@ public class LinearSpacePerfectHashing <T> implements HashTable<T> {
         if(this.secondLevelHashTables[firstLevelIndex] == null){
             this.secondLevelHashTables[firstLevelIndex] = (T[]) new Object[1];
             this.secondLevelHashFunctions[firstLevelIndex] = new UniversalHashing<T>(1);
-            this.secondLevelHashTables[firstLevelIndex][0] = key;
-        }else if (this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] == null){
-            this.secondLevelHashTables[firstLevelIndex][secondLevelIndex] = key;
+            this.secondLevelHashTables[firstLevelIndex][this.secondLevelHashFunctions[firstLevelIndex].hash(key)] = key;
+        }else if (this.secondLevelHashTables[firstLevelIndex][this.secondLevelHashFunctions[firstLevelIndex].hash(key)] == null){
+            this.secondLevelHashTables[firstLevelIndex][this.secondLevelHashFunctions[firstLevelIndex].hash(key)] = key;
         }else{
             this.rehashTableEntry(firstLevelIndex, key);
         }
