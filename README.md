@@ -4,7 +4,6 @@ Perfect Hashing is a hashing mechanism where a hash function is designed to make
 
 ## Universal Hashing ( The Matrix Method )
 
----
 
 technique to create hash functions that are well-distributed for any input. The class is generic to allow it to be used with any type of object.
 
@@ -14,7 +13,7 @@ hashing a value **(x)** and get a key **h(x)** by matrix multiplication of a ran
 
 ## O( N²) Space Solution Perfect Hashing
 
----
+
 
 Allocating a hash table size based on the square of the input size **(N²)** to minimize collision probability at the cost of increased space usage. Universal hashing is used to generate the hash function
 
@@ -24,7 +23,7 @@ it includes these **Operations: Insert, Delete, Contains**
 
 ## O( N ) Space Solution Perfect Hashing
 
----
+
 
 Linear Space Perfect Hashing uses a two-level hash table design to achieve near-perfect hashing with space complexity linear to the number of elements, *O*(*N*). It leverages universal hashing for both levels to ensure minimal collision.
 
@@ -37,7 +36,7 @@ Linear Space Perfect Hashing uses a two-level hash table design to achieve near-
 
 ## **Comparison between** O(N²) & O( N ) Space Solution
 
----
+
 
 ## **Mean time calculation**
 
@@ -108,13 +107,13 @@ The **`MeanTime`** class facilitates the evaluation of Perfect Hashing algorithm
 
 ## English Dictionary
 
----
+
 
 This application is a simple English dictionary implemented using perfect hashing. It provides functionalities to initialize the dictionary, insert new words, delete existing words, and search for words.
 
 ### Operations
 
----
+
 
 - **Initialize:** Takes the name of the type of the backend perfect hashing as an
 input and creates a new empty dictionary based on it.
@@ -129,7 +128,7 @@ line. And tries to delete all that words from the dictionary.
 
 ## **Command Line Interface**
 
----
+
 
 1. **Initialize:**
     - Accepts the type of the backend perfect hashing (O(N) or O(N²)) as an initial input.
@@ -167,7 +166,7 @@ line. And tries to delete all that words from the dictionary.
 
 ## **Java Unit Testing**
 
----
+
 
 ### Dictionary Tests
 
